@@ -1,12 +1,18 @@
 package org.vaadin.example.timerlabel;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -21,6 +27,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * initialize non-component functionality.
  */
 @Push
+@Theme("sampletheme")
 public class TimerLabelSampleUI extends UI {
 	
 	private static final long serialVersionUID = 1L;
@@ -34,26 +41,47 @@ public class TimerLabelSampleUI extends UI {
 		content.setSpacing(true);
 		setContent(content);
 		
-		// Create a TimerLabel from 0 to 10  with 5s alert
-		TimerLabel l = new TimerLabel(0, 10, 5);
-		l.setStyleName(ValoTheme.LABEL_H1);
-		content.addComponent(l);
+		// Create a TimerLabel from 0s to 10s with 5s alert
+		TimerLabel timerLabel = new TimerLabel(0, 5, 10);
+		timerLabel.setStyleName(ValoTheme.LABEL_H1);
+		content.addComponent(timerLabel);
 
 		
-		// Create a TimerLabel from 10 to 0  with 5s alert
-		TimerLabel l2 = new TimerLabel(10, 0, 5);
-		l2.setStyleName(ValoTheme.LABEL_H1);
-		content.addComponent(l2);
+		// Create a TimerLabel from 10s to 0s with 5s alert
+		TimerLabel timerLabel2 = new TimerLabel(10, 5, 0);
+		timerLabel2.setStyleName(ValoTheme.LABEL_H1);
+		content.addComponent(timerLabel2);
 
-		// Create a TimerLabel from 10 to 0  with 5s alert
-		TimerLabel l3 = new TimerLabel(30, 10, 2);
-		l3.setStyleName(ValoTheme.LABEL_H1);
-		content.addComponent(l3);
+		// Create a TimerLabel from 30s to 2s  with 10s alert
+		TimerLabel timerLabel3 = new TimerLabel(30, 10, 2);
+		timerLabel3.setStyleName(ValoTheme.LABEL_H1);
+		content.addComponent(timerLabel3);
 		
-		content.addComponent(new Button("Reset to 30", e ->{ l3.setSeconds(30);}));
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);		
+		content.addComponent(buttons);
+		
+		buttons.addComponent(new Button("Sync to 30", e ->{ timerLabel3.syncSeconds(30);}));
+		buttons.addComponent(new Button("Sync to 0 in 2 seconds", e -> { 			
+			 Executors.newSingleThreadScheduledExecutor()
+			 .schedule(() -> { syncSeconds(timerLabel3, 0); }, 2, TimeUnit.SECONDS);			
+		}));
+		buttons.addComponent(new Button("Sync to 15 in 2 seconds", e -> { 			
+			 Executors.newSingleThreadScheduledExecutor()
+			 .schedule(() -> { syncSeconds(timerLabel3, 15); }, 2, TimeUnit.SECONDS);			
+		}));
+		buttons.addComponent(new Button("Sync to 30 in 2 seconds", e -> { 			
+			 Executors.newSingleThreadScheduledExecutor()
+			 .schedule(() -> { syncSeconds(timerLabel3, 30); }, 2, TimeUnit.SECONDS);			
+		}));
 
 	}
 	
+	/// We need lock the UI using access(...) when modifying it from background thread
+	private void syncSeconds(TimerLabel timerLabel, int seconds) {
+		this.access(() -> {timerLabel.syncSeconds(seconds);});		
+	}
+
 	@WebServlet(urlPatterns = "/*", name = "TimerLabelSampleUI", asyncSupported = true)
 	@VaadinServletConfiguration(ui = TimerLabelSampleUI.class, productionMode = false)
 	public static class MyUIServlet extends VaadinServlet {

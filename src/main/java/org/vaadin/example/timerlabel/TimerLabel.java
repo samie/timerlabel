@@ -21,25 +21,32 @@ public class TimerLabel extends Label {
 	private long fromSeconds = DEFAULT_FROM_SEC;
 	private long toSeconds = DEFAULT_TO_SEC;
 	
-	public TimerLabel() {		
-		setStyleName(STYLE_NAME);
+	public TimerLabel() {
+		super();
 		timer = new TimerExtension(this);
+		super.setStyleName(STYLE_NAME);
 		timer.reset(DEFAULT_FROM_SEC);		
 	}
 	
-	public TimerLabel(int fromSec, int toSec, int alertSec) {
+	public TimerLabel(int fromSec, int alertSec, int toSec) {
 		this();
 		this.fromSeconds = fromSec;
 		this.toSeconds = toSec;
 		this.alertSeconds = alertSec;	
 		timer.reset(fromSeconds);
 	}
+	
+    /*
+     * Sets the component's style. Don't add a JavaDoc comment here, we use the
+     * default documentation from implemented interface.
+     */
+    @Override
+    public void setStyleName(String style) {
+    	super.setStyleName(style);
+    	super.addStyleName(STYLE_NAME);
+    }
 
-	public long getSeconds() {
-		return seconds;
-	}
-
-	public void setSeconds(long seconds) {
+	public void syncSeconds(long seconds) {
 		this.seconds = seconds;
 		this.timer.reset(seconds);
 	}

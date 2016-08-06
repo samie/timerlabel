@@ -44,7 +44,7 @@ window.org_vaadin_example_timerlabel_TimerLabel_TimerExtension = function() {
     		seconds = seconds < 10 ? "0" + seconds : seconds;
 
     		// Update display
-    		display.textContent = sign + minutes + ":" + seconds;
+    		display.textContent = sign + minutes + ":" + seconds; 
     		
     		// Overtime
     		var overtime = remaining < 0; 
