@@ -30,10 +30,7 @@ public class TimerLabel extends Label {
 	
 	public TimerLabel(int fromSec, int alertSec, int toSec) {
 		this();
-		this.fromSeconds = fromSec;
-		this.toSeconds = toSec;
-		this.alertSeconds = alertSec;	
-		timer.reset(fromSeconds);
+		this.reset(fromSec, alertSec, toSec, fromSec);
 	}
 	
     /*
@@ -49,6 +46,13 @@ public class TimerLabel extends Label {
 	public void syncSeconds(long seconds) {
 		this.seconds = seconds;
 		this.timer.reset(seconds);
+	}
+
+	public void reset(int fromSec, int alertSec, int toSec,int currentSec) {
+		this.fromSeconds = fromSec;
+		this.toSeconds = toSec;
+		this.alertSeconds = alertSec;	
+		timer.reset(currentSec);
 	}
 
 	public class TimerExtension extends AbstractJavaScriptExtension {
