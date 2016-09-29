@@ -74,6 +74,8 @@ public class TimerLabelSampleUI extends UI {
 			 Executors.newSingleThreadScheduledExecutor()
 			 .schedule(() -> { syncSeconds(timerLabel3, 30); }, 2, TimeUnit.SECONDS);			
 		}));
+		buttons.addComponent(new Button("Pause", e -> timerLabel.pause()));
+		buttons.addComponent(new Button("Resume", e -> timerLabel.resume()));
 
 	}
 	

@@ -55,6 +55,14 @@ public class TimerLabel extends Label {
 		timer.reset(currentSec);
 	}
 
+	public void pause() {
+		timer.pause();
+	}
+
+	public void resume() {
+		timer.resume();
+	}
+
 	public class TimerExtension extends AbstractJavaScriptExtension {
 		private static final long serialVersionUID = 1L;
 
@@ -65,6 +73,15 @@ public class TimerLabel extends Label {
 		public void reset(long seconds) {
 			callFunction("reset", seconds, fromSeconds, toSeconds, alertSeconds);
 		}
+		
+		public void pause() {
+			callFunction("pause");
+		}
+
+		public void resume() {
+			callFunction("resume");
+		}
+
 	}
 	
 }

@@ -4,9 +4,28 @@ window.org_vaadin_example_timerlabel_TimerLabel_TimerExtension = function() {
 
     this.parentElement = this.getElement(this.getParentId());
     this.timerId = null;
+    this.paused = false;
     
+    this.pause = function() {
+    	this.paused = true;
+    };
+    
+    this.resume = function() {    	
+        this.paused = false;
+        this.reset(this._current,this._fromSeconds,this._toSeconds,this._alertSeconds);
+    };
+
     this.reset = function(current, fromSeconds, toSeconds, alertSeconds) {
 
+
+    	// Store values for pausing
+    	this._current = current;
+    	this._fromSeconds = fromSeconds;
+    	this._toSeconds = toSeconds;
+    	this._alertSeconds = alertSeconds;
+    	
+    	var self = this;
+    	
     	var display = this.parentElement;
     	
     	var duration = Math.abs(toSeconds - fromSeconds); 
@@ -26,11 +45,20 @@ window.org_vaadin_example_timerlabel_TimerLabel_TimerExtension = function() {
     	var syncTimeStampMs = Date.now();
     	
     	// Timer function
-    	function timer() {    		
+    	function timer() {   
+    		
+    		// Check if paused
+    		if (self.paused) {
+    			return;
+    		} 
+    		
     		var now = Date.now();
     		var elapsed = Math.round(syncElapsedSec + Math.abs(now - syncTimeStampMs) / 1000);
         	var remaining = Math.round(duration-elapsed);
-    			
+        	
+        	// store elapsed as current time
+        	self._current = self.countUp ? self._fromSeconds + elapsed: self._fromSeconds - elapsed;
+        	
     		var displayTime = countUp ? fromSeconds + elapsed : fromSeconds - elapsed;
 
     		// does the same job as parseInt truncates the float
