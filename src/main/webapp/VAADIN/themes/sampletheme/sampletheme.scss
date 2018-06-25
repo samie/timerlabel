@@ -29,6 +29,12 @@
 
 @import "../valo/valo.scss";
 
+@keyframes blink {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
 @mixin sampletheme {
   	@include valo;
   	  	
@@ -43,17 +49,8 @@
   
     .timerlabel.overtime {
   		color: red;
- 		animation: blink 0.5s ease 0s infinite;
-  		-webkit-animation: blink 0.5s step-start 0s infinite;
+ 		animation: blink 1s linear infinite;
+ 		-webkit-animation: blink 1s linear infinite;
   	}
-  
-	
-	@keyframes blink {
-		50% { color:blue; }
-	}
-	
-	@-webkit-keyframes blink {
-		50% { color:blue; }
-	}
-	
+
 }

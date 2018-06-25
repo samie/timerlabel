@@ -999,7 +999,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "7.7.0.beta1";
+	content: "7.7.0";
 }
 
 .v-widget {
@@ -1557,18 +1557,17 @@ div.v-layout.v-horizontal.v-widget {
 	vertical-align: top;
 }
 
-.sampletheme {
-	@keyframes blink {
+@keyframes blink {
+		0% {
+		opacity: 1;
+	}
 		50% {
-		color: blue;
+		opacity: 0;
+	}
+		100% {
+		opacity: 1;
 	}
 	}
-	@-webkit-keyframes blink {
-		50% {
-		color: blue;
-	}
-	}
-}
 
 .sampletheme.v-app, .sampletheme.v-app-loading {
 	font: 300 16px/1.55 "Open Sans", sans-serif;
@@ -12989,6 +12988,6 @@ div.v-layout.v-horizontal.v-widget {
 
 .sampletheme .timerlabel.overtime {
 	color: red;
-	animation: blink 0.5s ease 0s infinite;
-	-webkit-animation: blink 0.5s step-start 0s infinite;
+	animation: blink 1s linear infinite;
+	-webkit-animation: blink 1s linear infinite;
 }
