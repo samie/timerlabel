@@ -35,28 +35,27 @@ public class TimerLabelSampleUI extends UI {
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		
-		VerticalLayout content = new VerticalLayout();
-		content.setSizeFull();
+		VerticalLayout content = new VerticalLayout();	
 		content.setMargin(true);
 		content.setSpacing(true);
 		setContent(content);
 		
-		// Create a TimerLabel from 0s to 10s with 5s alert
+		content.addComponent(new Label("TimerLabel from 0s to 10s with 5s alert:"));
 		TimerLabel timerLabel = new TimerLabel(0, 5, 10);
-		timerLabel.setStyleName(ValoTheme.LABEL_H1);
+		timerLabel.setStyleName(ValoTheme.LABEL_H2);
 		content.addComponent(timerLabel);
 
-		
-		// Create a TimerLabel from 10s to 0s with 5s alert
+		content.addComponent(new Label("TimerLabel from 10s to 0s with 5s alert:"));
 		TimerLabel timerLabel2 = new TimerLabel(10, 5, 0);
-		timerLabel2.setStyleName(ValoTheme.LABEL_H1);
+		timerLabel2.setStyleName(ValoTheme.LABEL_H2);
 		content.addComponent(timerLabel2);
 
-		// Create a TimerLabel from 30s to 2s  with 10s alert
+		content.addComponent(new Label("TimerLabel from 30s to 2s  with 10s alert:"));
 		TimerLabel timerLabel3 = new TimerLabel(30, 10, 2);
-		timerLabel3.setStyleName(ValoTheme.LABEL_H1);
+		timerLabel3.setStyleName(ValoTheme.LABEL_H2);
 		content.addComponent(timerLabel3);
-		
+
+		content.addComponent(new Label("Controls for the last label:"));
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.setSpacing(true);		
 		content.addComponent(buttons);
@@ -74,8 +73,8 @@ public class TimerLabelSampleUI extends UI {
 			 Executors.newSingleThreadScheduledExecutor()
 			 .schedule(() -> { syncSeconds(timerLabel3, 30); }, 2, TimeUnit.SECONDS);			
 		}));
-		buttons.addComponent(new Button("Pause", e -> timerLabel.pause()));
-		buttons.addComponent(new Button("Resume", e -> timerLabel.resume()));
+		buttons.addComponent(new Button("Pause", e -> timerLabel3.pause()));
+		buttons.addComponent(new Button("Resume", e -> timerLabel3.resume()));
 
 	}
 	
