@@ -2,6 +2,7 @@ package org.vaadin.example.timerlabel;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.AbstractJavaScriptExtension;
+import com.vaadin.shared.JavaScriptExtensionState;
 import com.vaadin.ui.Label;
 
 
@@ -25,7 +26,7 @@ public class TimerLabel extends Label {
 		super();
 		timer = new TimerExtension(this);
 		super.setStyleName(STYLE_NAME);
-		timer.reset(DEFAULT_FROM_SEC);		
+		timer.getState().fromSeconds = DEFAULT_FROM_SEC;
 	}
 	
 	public TimerLabel(int fromSec, int alertSec, int toSec) {
@@ -44,15 +45,16 @@ public class TimerLabel extends Label {
     }
 
 	public void syncSeconds(long seconds) {
-		this.seconds = seconds;
-		this.timer.reset(seconds);
+		timer.getState().current = seconds;
 	}
 
 	public void reset(int fromSec, int alertSec, int toSec,int currentSec) {
-		this.fromSeconds = fromSec;
-		this.toSeconds = toSec;
-		this.alertSeconds = alertSec;	
-		timer.reset(currentSec);
+		TimerLabelState state = timer.getState();
+		state.fromSeconds = fromSec;
+		state.toSeconds = toSec;
+		state.alertSeconds = alertSec;
+		state.current = currentSec;
+
 	}
 
 	public void pause() {
@@ -69,19 +71,27 @@ public class TimerLabel extends Label {
 		private TimerExtension(Label label) {
 			super(label);
 		}		
-	
-		public void reset(long seconds) {
-			callFunction("reset", seconds, fromSeconds, toSeconds, alertSeconds);
-		}
-		
+
 		public void pause() {
-			callFunction("pause");
+			getState().paused = true;
 		}
 
-		public void resume() {
-			callFunction("resume");
+		public void resume() { getState().paused = false; }
+
+
+		@Override
+		protected TimerLabelState getState() {
+			return (TimerLabelState) super.getState();
 		}
 
 	}
-	
+
+	public static class TimerLabelState extends JavaScriptExtensionState {
+
+    	public boolean paused;
+
+		public long current, fromSeconds, toSeconds, alertSeconds;
+
+
+	}
 }

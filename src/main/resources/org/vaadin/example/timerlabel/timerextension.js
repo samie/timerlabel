@@ -5,6 +5,24 @@ window.org_vaadin_example_timerlabel_TimerLabel_TimerExtension = function() {
     this.parentElement = this.getElement(this.getParentId());
     this.timerId = null;
     this.paused = false;
+
+        // Handle changes from the server-side
+     this.onStateChange = function() {
+
+         var s = this.getState();
+
+         if (s.paused != this.paused) {
+             if (s.paused) {
+                 this.pause();
+             } else {
+                 this.resume();
+             }
+         } else {
+            this.reset(s.current, s.fromSeconds, s.toSeconds, s.alertSeconds);
+         }
+
+
+     };
     
     this.pause = function() {
     	this.paused = true;
