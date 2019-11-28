@@ -75,6 +75,7 @@ public class TimerLabelSampleUI extends UI {
 		}));
 		buttons.addComponent(new Button("Pause", e -> timerLabel3.pause()));
 		buttons.addComponent(new Button("Resume", e -> timerLabel3.resume()));
+		buttons.addComponent(new Button("Show/Hide", e -> timerLabel3.setVisible(!timerLabel3.isVisible())));
 
 	}
 	

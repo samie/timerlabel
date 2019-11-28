@@ -18,10 +18,8 @@ public class TimerLabel extends Label {
 	
 	private long seconds;
 	private TimerExtension timer;
-	private long alertSeconds = DEFAULT_ALERT_SEC;
-	private long fromSeconds = DEFAULT_FROM_SEC;
-	private long toSeconds = DEFAULT_TO_SEC;
-	
+	private long startTime;
+
 	public TimerLabel() {
 		super();
 		timer = new TimerExtension(this);
@@ -45,7 +43,7 @@ public class TimerLabel extends Label {
     }
 
 	public void syncSeconds(long seconds) {
-		timer.getState().current = seconds;
+    	timer.getState().current = seconds;
 	}
 
 	public void reset(int fromSec, int alertSec, int toSec,int currentSec) {
@@ -54,7 +52,20 @@ public class TimerLabel extends Label {
 		state.toSeconds = toSec;
 		state.alertSeconds = alertSec;
 		state.current = currentSec;
+		this.startTime = System.currentTimeMillis(); // Stored for calculations
+	}
 
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			// We synchronize the clock back to the time that has been elapsed since start based on RTC
+			long elapsedTimeMs = System.currentTimeMillis() - startTime;
+			TimerLabelState state = timer.getState();
+			syncSeconds(state.fromSeconds < state.toSeconds?
+					state.fromSeconds+elapsedTimeMs/1000 :
+					state.fromSeconds-elapsedTimeMs/1000);
+		}
 	}
 
 	public void pause() {
@@ -88,7 +99,7 @@ public class TimerLabel extends Label {
 
 	public static class TimerLabelState extends JavaScriptExtensionState {
 
-    	public boolean paused;
+    	public boolean paused, visible = true;
 
 		public long current, fromSeconds, toSeconds, alertSeconds;
 
